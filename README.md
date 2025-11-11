@@ -11,7 +11,28 @@ A template repository for Vincent Ability and Policy authors. This monorepo uses
 ## Requirements
 
 - Node.js: ^20.19.4
-- pnpm: 10.7.0
+- pnpm: 10.7.0 (managed via Corepack)
+
+### Using Corepack to use pnpm
+
+This repo is configured to use pnpm and enforces it in the preinstall step. If you do not have pnpm set up, use Corepack:
+
+```bash
+# Enable Corepack globally (ships with Node 16.9+)
+corepack enable
+
+# Ensure npm & pnpm shims are enabled
+corepack enable npm
+corepack enable pnpm
+
+# Or run the helper script from the repo root
+pnpm run use-corepack
+```
+
+Notes:
+
+- The repo sets "packageManager": "pnpm@10.7.0" in package.json. Corepack will automatically provision that version.
+- The preinstall script scripts/check-packagemanager.sh verifies Node and Corepack are available and enforces pnpm via `npx only-allow pnpm`.
 
 ## Setup
 
@@ -48,11 +69,16 @@ To run the end-to-end tests, you need to configure test wallet private keys:
 
 ## Quick start
 
-1. Install pnpm if you don't have it:
+1. Verify your version of corepack and ensure you are on > 0.31.0
    ```bash
-   npm install -g pnpm@10.7.0
+   corepack -v
+   npm install -g corepack@latest
    ```
-2. Set up your environment (see Setup section above):
+2. Enable Corepack:
+   ```bash
+   corepack enable && corepack enable pnpm
+   ```
+3. Set up your environment (see Setup section above):
 
    ```bash
    # Set up Pinata JWT for IPFS uploads
@@ -64,12 +90,12 @@ To run the end-to-end tests, you need to configure test wallet private keys:
    # Edit packages/test-e2e/.env.test-e2e and add your test private keys
    ```
 
-3. Install dependencies and build:
+4. Install dependencies and build:
    ```bash
    pnpm install
    pnpm build
    ```
-4. Run the example end-to-end test flow:
+5. Run the example end-to-end test flow:
    ```bash
    pnpm test-e2e
    ```
