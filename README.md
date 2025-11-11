@@ -1,4 +1,4 @@
-# Vincent Starter Kit
+# Vincent Ability + Policy Template
 
 A template repository for Vincent Ability and Policy authors. This monorepo uses Nx and pnpm and includes:
 
@@ -129,11 +129,11 @@ Project-level Nx targets you may find useful (run via pnpm nx ...):
 
 ## Packages in this repository
 
-| Package                           | Path                      | Purpose                                                                                                                                                                                                                                                        |
-| --------------------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| @your-org/ability-template        | packages/ability-template | A template Vincent Ability for you to customize. Demonstrates Ability authoring, bundling, and deployment. For blockchain transactions, consider using [@lit-protocol/vincent-scaffold-sdk](https://www.npmjs.com/package/@lit-protocol/vincent-scaffold-sdk). |
-| @your-org/policy-template         | packages/policy-template  | A template Vincent Policy for you to customize. Demonstrates Policy authoring, bundling, and deployment. Includes `inputUiSchema.json` for defining user-facing form fields (JSON Schema + UI Schema).                                                         |
-| @lit-protocol/vincent-example-e2e | packages/test-e2e         | Private package with end-to-end tests. It orchestrates building and deploying your Ability & Policy and then runs integration tests via Jest.                                                                                                                  |
+| Package                    | Path                      | Purpose                                                                                                                                                                                                                                                        |
+| -------------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| @your-org/ability-template | packages/ability-template | A template Vincent Ability for you to customize. Demonstrates Ability authoring, bundling, and deployment. For blockchain transactions, consider using [@lit-protocol/vincent-scaffold-sdk](https://www.npmjs.com/package/@lit-protocol/vincent-scaffold-sdk). |
+| @your-org/policy-template  | packages/policy-template  | A template Vincent Policy for you to customize. Demonstrates Policy authoring, bundling, and deployment. Includes `inputUiSchema.json` for defining user-facing form fields (JSON Schema + UI Schema).                                                         |
+| @your-org/test-e2e         | packages/test-e2e         | Private package with end-to-end tests. It orchestrates building and deploying your Ability & Policy and then runs integration tests via Jest.                                                                                                                  |
 
 ## Customizing Your Policy
 

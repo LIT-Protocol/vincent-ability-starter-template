@@ -1,5 +1,5 @@
 {
-  "name": "@lit-protocol/vincent-example-e2e",
+  "name": "@your-org/test-e2e",
   "private": true,
   "version": "1.0.0",
   "main": "./dist/src/index.js",

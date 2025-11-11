@@ -42,7 +42,7 @@
     "@babel/preset-env": "7.28.3",
     "@dotenvx/dotenvx": "1.44.2",
     "@eslint/js": "9.25.1",
-    "@lit-protocol/vincent-example-e2e": "workspace:*",
+    "@your-org/test-e2e": "workspace:*",
     "@nx/eslint": "21.2.1",
     "@nx/eslint-plugin": "21.2.1",
     "@nx/jest": "21.2.1",
