@@ -27,21 +27,16 @@
     "build": "nx run-many --outputStyle=static -t build",
     "test": "nx run-many -t test",
     "test-e2e": "nx run-many -t test-e2e",
-    "reset-e2e": "mv packages/test-e2e/.env.test-e2e packages/test-e2e/.env.test-e2e.backup",
     "lint": "nx run-many --outputStyle=static -t lint",
     "typecheck": "nx run-many --outputStyle=static -t typecheck",
     "clean": "nx reset && nx run-many --outputStyle=static -t=clean && rm -Rf node_modules tsconfig.tsbuildinfo",
     "prepare": "husky",
     "use-corepack": "corepack enable && corepack enable npm && corepack enable pnpm",
     "reset": "pnpm clean && pnpm install",
-    "hard-build": "pnpm reset && pnpm build",
-    "bootstrap": "pnpm install && pnpm build && tsx ./src/bin/bootstrap.ts"
+    "hard-build": "pnpm reset && pnpm build"
   },
   "dependencies": {
-    "envfile": "7.1.0",
-    "inquirer": "12.9.4",
-    "tslib": "2.8.1",
-    "tsx": "4.20.5"
+    "tslib": "2.8.1"
   },
   "devDependencies": {
     "@babel/preset-env": "7.28.3",
@@ -56,13 +51,11 @@
     "@swc-node/register": "1.9.1",
     "@swc/core": "1.5.7",
     "@swc/helpers": "0.5.11",
-    "@types/inquirer": "9.0.9",
     "@types/jest": "29.5.14",
     "@types/node": "20",
     "@typescript-eslint/eslint-plugin": "8.26.1",
     "@typescript-eslint/parser": "8.26.1",
     "babel-jest": "30.1.1",
-    "cli-table3": "0.6.5",
     "esbuild": "0.19.2",
     "eslint": "9.22.0",
     "eslint-config-next": "15.1.7",

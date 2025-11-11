@@ -4,35 +4,75 @@ A template repository for Vincent Ability and Policy authors. This monorepo uses
 
 - A template Vincent Ability for you to customize
 - A template Vincent Policy for you to customize
-- End-to-end tests that automatically build, deploy, and test your abilities and policies
+- End-to-end tests that automatically build, deploy (to IPFS), and test your abilities and policies
 
 ### See detailed documentation / guides at [docs.heyvincent.ai](https://docs.heyvincent.ai)
 
 ## Requirements
 
 - Node.js: ^20.19.4
-- pnpm: 10.7.0 (managed via Corepack)
+- pnpm: 10.7.0
 
-### Using Corepack to use pnpm
+## Setup
 
-This repo is configured to use pnpm and enforces it in the preinstall step. If you do not have pnpm set up, use Corepack:
+### Pinata JWT for IPFS Uploads
 
-```bash
-# Enable Corepack globally (ships with Node 16.9+)
-corepack enable
+Before you can build and deploy your abilities and policies, you need to set up your Pinata JWT for IPFS uploads.
 
-# Ensure npm & pnpm shims are enabled
-corepack enable npm
-corepack enable pnpm
+1. Get your Pinata JWT from https://app.pinata.cloud/developers/api-keys
+2. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+3. Edit `.env` and add your Pinata JWT:
+   ```bash
+   PINATA_JWT=your_pinata_jwt_here
+   ```
 
-# Or run the helper script from the repo root
-pnpm run use-corepack
-```
+### E2E Test Environment
 
-Notes:
+To run the end-to-end tests, you need to configure test wallet private keys:
 
-- The repo sets "packageManager": "pnpm@10.7.0" in package.json. Corepack will automatically provision that version.
-- The preinstall script scripts/check-packagemanager.sh verifies Node and Corepack are available and enforces pnpm via `npx only-allow pnpm`.
+1. Copy the test environment example file:
+   ```bash
+   cp packages/test-e2e/.env.test-e2e.example packages/test-e2e/.env.test-e2e
+   ```
+2. Edit `packages/test-e2e/.env.test-e2e` and add your test private keys:
+
+   - **TEST_FUNDER_PRIVATE_KEY**: A wallet funded with tstLPX tokens on LIT testnet (Yellowstone). Get tokens from https://chronicle-yellowstone-faucet.getlit.dev/
+   - **TEST_APP_MANAGER_PRIVATE_KEY**: Wallet that owns the Vincent App (created automatically or provide your own)
+   - **TEST_APP_DELEGATEE_PRIVATE_KEY**: Wallet that executes Vincent Abilities (created automatically or provide your own)
+   - **TEST_AGENT_WALLET_PKP_OWNER_PRIVATE_KEY**: Wallet that owns the Agent Wallet PKP (created automatically or provide your own)
+
+   The funder wallet must have tstLPX tokens. The other wallets can be any valid Ethereum private keys and will be funded automatically by the test setup.
+
+## Quick start
+
+1. Install pnpm if you don't have it:
+   ```bash
+   npm install -g pnpm@10.7.0
+   ```
+2. Set up your environment (see Setup section above):
+
+   ```bash
+   # Set up Pinata JWT for IPFS uploads
+   cp .env.example .env
+   # Edit .env and add your PINATA_JWT
+
+   # Set up E2E test environment
+   cp packages/test-e2e/.env.test-e2e.example packages/test-e2e/.env.test-e2e
+   # Edit packages/test-e2e/.env.test-e2e and add your test private keys
+   ```
+
+3. Install dependencies and build:
+   ```bash
+   pnpm install
+   pnpm build
+   ```
+4. Run the example end-to-end test flow:
+   ```bash
+   pnpm test-e2e
+   ```
 
 ## Scripts
 
@@ -44,7 +84,6 @@ Root-level scripts you will commonly use:
 | build        | nx run-many -t build                                    | Builds all packages (includes action bundling via Nx deps)              |
 | test         | nx run-many -t test                                     | Runs unit tests (if any)                                                |
 | test-e2e     | nx run-many -t test-e2e                                 | Builds + deploys the example Ability & Policy, then runs Jest E2E tests |
-| reset-e2e    | Moves packages/test-e2e/.env.test-e2e to a .backup file | Useful to re-run bootstrap for a new env                                |
 | lint         | nx run-many -t lint                                     | Lints all packages                                                      |
 | typecheck    | nx run-many -t typecheck                                | Types checks all packages                                               |
 | clean        | nx reset and per-project clean                          | Removes build artifacts and node_modules in projects                    |
@@ -52,7 +91,6 @@ Root-level scripts you will commonly use:
 | use-corepack | corepack enable ...                                     | Quickly enables pnpm via Corepack                                       |
 | reset        | pnpm clean && pnpm install                              | Full reinstall                                                          |
 | hard-build   | pnpm reset && pnpm build                                | Clean reinstall and build                                               |
-| bootstrap    | tsx ./src/bin/bootstrap.ts                              | Interactive environment setup (see Bootstrap flow)                      |
 
 Project-level Nx targets you may find useful (run via pnpm nx ...):
 
@@ -111,52 +149,3 @@ Example for a rate-limiting policy:
 ```
 
 This file is published with your policy package and used by Vincent tooling to generate configuration forms.
-
-## Bootstrap flow
-
-The bootstrap script guides you through configuring the repo for the first time and preparing the E2E environment.
-
-Command:
-
-```bash
-pnpm bootstrap
-```
-
-What happens:
-
-1. Pinata JWT setup
-   - A Pinata JWT is required for e2e tests and for publishing Vincent Abilities and Policies to the Registry.
-   - You will be prompted to obtain a Pinata JWT from https://app.pinata.cloud/developers/api-keys.
-   - The JWT you provide will be stored in a root-level .env as `PINATA_JWT`. Tooling will use this to authenticate with Pinata.
-   - If you already have a .env file, the script will skip this step.
-2. Funder environment setup for E2E
-   - You must fund a wallet with testLPX on the LIT testnet (Yellowstone). You can fund your wallet using the faucet as https://chronicle-yellowstone-faucet.getlit.dev/
-   - Once you have funded your wallet, you must provide its private key for usage by tooling in the repository.
-   - The bootstrap process creates additional test private keys (app manager, app delegatee, agent wallet PKP owner) and stores those keys in packages/test-e2e/.env.test-e2e
-
-Notes:
-
-- If a root .env already exists, the Pinata JWT step is skipped.
-- If packages/test-e2e/.env.test-e2e already exists, bootstrap aborts with an error so you don’t overwrite your private keys. Use `pnpm reset-e2e` to back up the existing .env.test-e2e file, and re-run bootstrap.
-
-## Quick start
-
-It is recommended to use Corepack to ensure pnpm is used for the repository's package management. If you use a different package manager, you may experience problematic behavior.
-
-1. Verify your version of corepack and ensure you are on > 0.31.0
-   ```bash
-   corepack -v
-   npm install -g corepack@latest
-   ```
-2. Enable Corepack:
-   ```bash
-   corepack enable && corepack enable pnpm
-   ```
-3. Run bootstrap to build and configure the repository :
-   ```bash
-   pnpm bootstrap
-   ```
-4. Run the example end-to-end test flow:
-   ```bash
-   pnpm test-e2e
-   ```
