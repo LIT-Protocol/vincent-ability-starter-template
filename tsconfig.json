@@ -3,10 +3,10 @@
   "compileOnSave": false,
   "references": [
     {
-      "path": "./packages/policy-counter"
+      "path": "./packages/policy-template"
     },
     {
-      "path": "./packages/ability-native-send"
+      "path": "./packages/ability-template"
     },
     {
       "path": "./packages/test-e2e"

@@ -1,10 +1,10 @@
 # Vincent Starter Kit
 
-A complete example repository for Vincent Ability and Policy authors. This monorepo uses Nx and pnpm and includes:
+A template repository for Vincent Ability and Policy authors. This monorepo uses Nx and pnpm and includes:
 
-- An example Vincent Ability that sends native tokens
-- An example Vincent Policy that counts ability executions
-- End-to-end tests that automatically build, deploy, and exercise the example ability and policy
+- A template Vincent Ability for you to customize
+- A template Vincent Policy for you to customize
+- End-to-end tests that automatically build, deploy, and test your abilities and policies
 
 ### See detailed documentation / guides at [docs.heyvincent.ai](https://docs.heyvincent.ai)
 
@@ -56,20 +56,61 @@ Root-level scripts you will commonly use:
 
 Project-level Nx targets you may find useful (run via pnpm nx ...):
 
-| Target        | Project(s)                          | What it does                                                           |
-| ------------- | ----------------------------------- | ---------------------------------------------------------------------- |
-| action:build  | ability-native-send, policy-counter | Bundles the Lit Action code for the Ability/Policy                     |
-| action:deploy | ability-native-send, policy-counter | Builds (if needed) and deploys the Lit Action code                     |
-| build         | all                                 | TypeScript build (depends on action:build where applicable)            |
-| test-e2e      | test-e2e                            | Depends on deploying both the example Ability & Policy, then runs Jest |
+| Target        | Project(s)                        | What it does                                                           |
+| ------------- | --------------------------------- | ---------------------------------------------------------------------- |
+| action:build  | ability-template, policy-template | Bundles the Lit Action code for the Ability/Policy                     |
+| action:deploy | ability-template, policy-template | Builds (if needed) and deploys the Lit Action code                     |
+| build         | all                               | TypeScript build (depends on action:build where applicable)            |
+| test-e2e      | test-e2e                          | Depends on deploying both the example Ability & Policy, then runs Jest |
 
 ## Packages in this repository
 
-| Package                                           | Path                         | Purpose                                                                                                                                              |
-| ------------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| @lit-protocol/vincent-example-ability-native-send | packages/ability-native-send | An example Vincent Ability that sends native tokens to a user. Demonstrates Ability authoring, bundling, and deployment.                             |
-| @lit-protocol/vincent-example-policy-counter      | packages/policy-counter      | An example Vincent Policy that counts the number of times an Ability is executed. Demonstrates Policy authoring, bundling, and deployment.           |
-| @lit-protocol/vincent-example-e2e                 | packages/test-e2e            | Private package with end-to-end tests. It orchestrates building and deploying the example Ability & Policy and then runs integration tests via Jest. |
+| Package                           | Path                      | Purpose                                                                                                                                                                                                                                                        |
+| --------------------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| @your-org/ability-template        | packages/ability-template | A template Vincent Ability for you to customize. Demonstrates Ability authoring, bundling, and deployment. For blockchain transactions, consider using [@lit-protocol/vincent-scaffold-sdk](https://www.npmjs.com/package/@lit-protocol/vincent-scaffold-sdk). |
+| @your-org/policy-template         | packages/policy-template  | A template Vincent Policy for you to customize. Demonstrates Policy authoring, bundling, and deployment. Includes `inputUiSchema.json` for defining user-facing form fields (JSON Schema + UI Schema).                                                         |
+| @lit-protocol/vincent-example-e2e | packages/test-e2e         | Private package with end-to-end tests. It orchestrates building and deploying your Ability & Policy and then runs integration tests via Jest.                                                                                                                  |
+
+## Customizing Your Policy
+
+When creating a Vincent Policy, you'll need to define the user-facing configuration parameters. This involves updating three key files:
+
+1. **`src/lib/schemas.ts`** - Define your `userParamsSchema` using Zod to specify what configuration parameters your policy accepts
+2. **`src/inputUiSchema.json`** - Define how end-users will see form inputs when connecting to an application and managing their policy values
+3. **`src/lib/vincent-policy.ts`** - Implement your policy logic using the user parameters
+
+The `inputUiSchema.json` file controls how end-users configure your policy when connecting their wallet to applications. It follows the [React JSON Schema Form](https://rjsf-team.github.io/react-jsonschema-form/) specification and consists of two parts:
+
+- **`jsonSchema`**: Defines the data structure, types, validation rules, and field metadata that end-users will fill in
+- **`uiSchema`**: Defines UI-specific rendering hints like widgets, placeholders, and help text to guide end-users
+
+Example for a rate-limiting policy:
+
+```json
+{
+  "jsonSchema": {
+    "type": "object",
+    "properties": {
+      "maxActions": {
+        "type": "number",
+        "title": "Maximum Actions",
+        "description": "Maximum number of actions allowed within the time window",
+        "minimum": 1
+      }
+    },
+    "required": ["maxActions"]
+  },
+  "uiSchema": {
+    "maxActions": {
+      "ui:widget": "number",
+      "ui:placeholder": "10",
+      "ui:help": "Enter the maximum number of actions allowed"
+    }
+  }
+}
+```
+
+This file is published with your policy package and used by Vincent tooling to generate configuration forms.
 
 ## Bootstrap flow
 
