@@ -129,49 +129,8 @@ Project-level Nx targets you may find useful (run via pnpm nx ...):
 
 ## Packages in this repository
 
-| Package                    | Path                      | Purpose                                                                                                                                                                                                                                                        |
-| -------------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| @your-org/ability-template | packages/ability-template | A template Vincent Ability for you to customize. Demonstrates Ability authoring, bundling, and deployment. For blockchain transactions, consider using [@lit-protocol/vincent-scaffold-sdk](https://www.npmjs.com/package/@lit-protocol/vincent-scaffold-sdk). |
-| @your-org/policy-template  | packages/policy-template  | A template Vincent Policy for you to customize. Demonstrates Policy authoring, bundling, and deployment. Includes `inputUiSchema.json` for defining user-facing form fields (JSON Schema + UI Schema).                                                         |
-| @your-org/test-e2e         | packages/test-e2e         | Private package with end-to-end tests. It orchestrates building and deploying your Ability & Policy and then runs integration tests via Jest.                                                                                                                  |
-
-## Customizing Your Policy
-
-When creating a Vincent Policy, you'll need to define the user-facing configuration parameters. This involves updating three key files:
-
-1. **`src/lib/schemas.ts`** - Define your `userParamsSchema` using Zod to specify what configuration parameters your policy accepts
-2. **`src/inputUiSchema.json`** - Define how end-users will see form inputs when connecting to an application and managing their policy values
-3. **`src/lib/vincent-policy.ts`** - Implement your policy logic using the user parameters
-
-The `inputUiSchema.json` file controls how end-users configure your policy when connecting their wallet to applications. It follows the [React JSON Schema Form](https://rjsf-team.github.io/react-jsonschema-form/) specification and consists of two parts:
-
-- **`jsonSchema`**: Defines the data structure, types, validation rules, and field metadata that end-users will fill in
-- **`uiSchema`**: Defines UI-specific rendering hints like widgets, placeholders, and help text to guide end-users
-
-Example for a rate-limiting policy:
-
-```json
-{
-  "jsonSchema": {
-    "type": "object",
-    "properties": {
-      "maxActions": {
-        "type": "number",
-        "title": "Maximum Actions",
-        "description": "Maximum number of actions allowed within the time window",
-        "minimum": 1
-      }
-    },
-    "required": ["maxActions"]
-  },
-  "uiSchema": {
-    "maxActions": {
-      "ui:widget": "number",
-      "ui:placeholder": "10",
-      "ui:help": "Enter the maximum number of actions allowed"
-    }
-  }
-}
-```
-
-This file is published with your policy package and used by Vincent tooling to generate configuration forms.
+| Package                    | Path                      | Purpose                                                                                                                                                                           |
+| -------------------------- | ------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| @your-org/ability-template | packages/ability-template | A template Vincent Ability for you to customize. Demonstrates Ability authoring, bundling, and deployment. See [package README](packages/ability-template/README.md) for details. |
+| @your-org/policy-template  | packages/policy-template  | A template Vincent Policy for you to customize. Demonstrates Policy authoring, bundling, and deployment. See [package README](packages/policy-template/README.md) for details.    |
+| @your-org/test-e2e         | packages/test-e2e         | Private package with end-to-end tests. It orchestrates building and deploying your Ability & Policy and then runs integration tests via Jest.                                     |
