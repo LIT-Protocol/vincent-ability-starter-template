@@ -1,5 +1,5 @@
 module.exports = {
-  displayName: '@lit-protocol/vincent-example-e2e',
+  displayName: '@your-org/test-e2e',
   preset: '../../jest.preset.js',
   testEnvironment: 'node',
   testMatch: ['<rootDir>/src/**/*.spec.ts', '<rootDir>/src/**/*.test.ts'],

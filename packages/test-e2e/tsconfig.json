@@ -4,10 +4,10 @@
   "include": [],
   "references": [
     {
-      "path": "../policy-counter"
+      "path": "../policy-template"
     },
     {
-      "path": "../ability-native-send"
+      "path": "../ability-template"
     },
     {
       "path": "./tsconfig.lib.json"

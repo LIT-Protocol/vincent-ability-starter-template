@@ -1,0 +1,8 @@
+{
+  "jsonSchema": {
+    "type": "object",
+    "properties": {},
+    "required": []
+  },
+  "uiSchema": {}
+}

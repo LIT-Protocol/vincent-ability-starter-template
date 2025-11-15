@@ -27,10 +27,10 @@
   ],
   "references": [
     {
-      "path": "../policy-counter/tsconfig.lib.json"
+      "path": "../policy-template/tsconfig.lib.json"
     },
     {
-      "path": "../ability-native-send/tsconfig.lib.json"
+      "path": "../ability-template/tsconfig.lib.json"
     }
   ]
 }
